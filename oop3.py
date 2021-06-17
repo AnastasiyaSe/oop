@@ -50,9 +50,9 @@ class Lecturer(Mentor):
 
     def __str__(self):
         some_lecturer = f'Имя:{self.name}\nФамилия:{self.surname}'
-        lecturer_grades = f'Средняя оценка за лекции:{sum(self.grades) / len(self.grades)} '
+        #lecturer_grades = f'Средняя оценка за лекции:{sum(self.grades) / len(self.grades)} '
         print(some_lecturer)
-        print(lecturer_grades)
+        #print(lecturer_grades)
 
     def __lt__(self, other):
         if not isinstance(other, Lecturer):
@@ -80,18 +80,30 @@ class Reviewer(Mentor):
 best_student = Student('Ruoy', 'Eman', 'your_gender')
 best_student.courses_in_progress += ['Python']
 student_one = Student('Alex', 'Leo','male')
+student_one.courses_in_progress += ['Java']
+
+
 
 reviewer_one = Reviewer('Olga', 'Dark')
 reviewer_one.__str__()
 reviewer_two = Reviewer('Oleg', 'Dark')
 reviewer_two.__str__()
+reviewer_one.rate_hw(best_student, 'Python', 10)
+reviewer_one.rate_hw(student_one, 'Python', 7)
 
 cool_mentor = Mentor('Some', 'Buddy')
 cool_mentor.courses_attached += ['Python']
-reviewer_one.rate_hw(best_student, 'Python', 10)
 mentor_two = Mentor ('Bob', 'Doll')
+
+lecturer_one = Lecturer('Summer', 'Winter')
+lecturer_two = Lecturer('Sam', 'Winter')
 
 cool_mentor.__str__()
 mentor_two.__str__()
 best_student.__str__()
 student_one.__str__()
+lecturer_one.__str__()
+lecturer_two.__lt__(lecturer_two, lecturer_one)
+student_one.rate_lc(lecturer_one, 'Java', 9)
+best_student.rate_lc(lecturer_two, 'Python', 5)
+
