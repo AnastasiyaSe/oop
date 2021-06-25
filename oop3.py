@@ -19,7 +19,10 @@ class Student:
 
     def __str__(self):
         some_student = f'Имя:{self.name}\nФамилия:{self.surname}'
-        student_grades = f'Средняя оценка за домашние задания:{sum(self.grades) / len(self.grades)} '
+        if len(self.grades) != 0:
+            student_grades = f'Средняя оценка за домашние задания:{sum(self.grades) / len(self.grades)} '
+        else:
+            student_grades = 0
         print(some_student)
         print(student_grades)
         print(f'Курсы в процессе изучения:{self.courses_in_progress}')
@@ -38,7 +41,10 @@ class Mentor:
 
     def __str__(self):
         some_lecturer = f'Имя:{self.name}\nФамилия:{self.surname}'
-        lecturer_grades = f'Средняя оценка за лекции:{sum(self.grades) / len(self.grades)} '
+        if len(self.grades) != 0:
+            lecturer_grades = f'Средняя оценка за лекции:{sum(self.grades) / len(self.grades)} '
+        else:
+            lecturer_grades = 0
         print(some_lecturer)
         print(lecturer_grades)
 
@@ -106,4 +112,3 @@ lecturer_one.__str__()
 lecturer_two.__lt__(lecturer_two, lecturer_one)
 student_one.rate_lc(lecturer_one, 'Java', 9)
 best_student.rate_lc(lecturer_two, 'Python', 5)
-
