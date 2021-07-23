@@ -1,5 +1,6 @@
-token = ''
+token = '958eb5d439726565e9333aa30e50e0f937ee432e927f0dbd541c541887d919a7c56f95c04217915c32008'
 import requests
+import json
 
 class VkUser:
     url = 'http://api.vk.com/method/'
@@ -19,7 +20,7 @@ class VkUser:
         photos_params = {
             'album_id':'profile',
             'count':1000,
-            'owner_id':454381118,
+            'owner_id':552934290,
             'photo_sizes':1,
             'extended':1
         }
@@ -27,7 +28,7 @@ class VkUser:
         return res.json()
 
 
-TOKEN = " "
+TOKEN = ''
 
 class YaUploader:
     def __init__(self, token: str):
@@ -57,14 +58,28 @@ class YaUploader:
 
 
 vk_client = VkUser(token, '5.126')
-print(vk_client.owner_id)
-sizes_photo = vk_client.get_photos()['response']['items'][0]['sizes'][-1]['type']
-upload_url = vk_client.get_photos()['response']['items'][0]['sizes'][-1]['url']
-name_photo = vk_client.get_photos()['response']['items'][0]['likes']['count']
-
-print(sizes_photo)
 
 
+
+
+
+
+dict = {}
+photos = []
 if __name__ == '__main__':
     uploader = YaUploader(token=TOKEN)
-    result = uploader.upload_file("netology/photo", f"{name_photo}")
+    for i in range(0, 5):
+
+        upload_url = vk_client.get_photos()['response']['items'][i]['sizes'][-1]['url']
+        name_photo = vk_client.get_photos()['response']['items'][i]['likes']['count']
+        sizes_photo = vk_client.get_photos()['response']['items'][i]['sizes'][-1]['type']
+        dict['file_name'] = name_photo
+        dict['size'] = sizes_photo
+        response = requests.get(upload_url)
+        with open(f'{name_photo}.jpg', 'wb') as f:
+            f.write(response.content)
+        photos.append(dict)
+        json = json.dumps(photos)
+        result = uploader.upload_file("netology/photo", f"{name_photo}.jpg")
+
+print (json)
