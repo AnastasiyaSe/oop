@@ -1,4 +1,4 @@
-token = '958eb5d439726565e9333aa30e50e0f937ee432e927f0dbd541c541887d919a7c56f95c04217915c32008'
+token = ''
 import requests
 import json
 
@@ -74,16 +74,21 @@ if __name__ == '__main__':
         name_photo = vk_client.get_photos()['response']['items'][i]['likes']['count']
         sizes_photo = vk_client.get_photos()['response']['items'][i]['sizes'][-1]['type']
         date = vk_client.get_photos()['response']['items'][i]['date']
-        dict['file_name'] = name_photo
         dict['size'] = sizes_photo
         response = requests.get(upload_url)
         if name_photo in dict:
             with open(f'{name_photo}+{date}.jpg', 'wb') as f:
                 f.write(response.content)
+            dict['file_name'] = name_photo + date
+            result = uploader.upload_file("netology/photo", f"{name_photo}+{date}.jpg")
+
         else:
             with open(f'{name_photo}.jpg', 'wb') as f:
                 f.write(response.content)
-        photos.append(dict)
-        result = uploader.upload_file("netology/photo", f"{name_photo}.jpg")
+            dict['file_name'] = name_photo
+            result = uploader.upload_file("netology/photo", f"{name_photo}.jpg")
+            photos.append(dict)
+
 
 json = json.dumps(photos)
+
