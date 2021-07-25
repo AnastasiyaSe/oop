@@ -73,13 +73,17 @@ if __name__ == '__main__':
         upload_url = vk_client.get_photos()['response']['items'][i]['sizes'][-1]['url']
         name_photo = vk_client.get_photos()['response']['items'][i]['likes']['count']
         sizes_photo = vk_client.get_photos()['response']['items'][i]['sizes'][-1]['type']
+        date = vk_client.get_photos()['response']['items'][i]['date']
         dict['file_name'] = name_photo
         dict['size'] = sizes_photo
         response = requests.get(upload_url)
-        with open(f'{name_photo}.jpg', 'wb') as f:
-            f.write(response.content)
+        if name_photo in dict:
+            with open(f'{name_photo}+{date}.jpg', 'wb') as f:
+                f.write(response.content)
+        else:
+            with open(f'{name_photo}.jpg', 'wb') as f:
+                f.write(response.content)
         photos.append(dict)
-        json = json.dumps(photos)
         result = uploader.upload_file("netology/photo", f"{name_photo}.jpg")
 
-print (json)
+json = json.dumps(photos)
