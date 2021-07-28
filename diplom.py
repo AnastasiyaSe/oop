@@ -1,4 +1,5 @@
-token = ''
+token = '958eb5d439726565e9333aa30e50e0f937ee432e927f0dbd541c541887d919a7c56f95c04217915c32008'
+Token = 'AQAAAAAnjAv8AADLW6I-pbSjY02ZrbDBlbAK6OE'
 import requests
 import json
 
@@ -32,7 +33,7 @@ TOKEN = ''
 
 class YaUploader:
     def __init__(self, token: str):
-        self.token = token
+        self.token = Token
 
     def get_headers(self):
         return {
@@ -47,10 +48,13 @@ class YaUploader:
         response = requests.get(upload_url, headers=headers, params=params)
         return response.json()
 
+
     def upload_file(self, disk_file_path, filename):
-        href = self._get_upload_link(disk_file_path=disk_file_path).get("href", "")
+        print(self._get_upload_link(disk_file_path=disk_file_path))
+        href = self._get_upload_link(disk_file_path=disk_file_path + filename).get("href", "")
         response = requests.put(href, data=open(filename, 'rb'))
         response.raise_for_status()
+
         if response.status_code == 201:
             print("Success")
 
@@ -64,8 +68,10 @@ vk_client = VkUser(token, '5.126')
 
 
 
+
 dict = {}
 photos = []
+photos_name = []
 if __name__ == '__main__':
     uploader = YaUploader(token=TOKEN)
     for i in range(0, 5):
@@ -76,19 +82,26 @@ if __name__ == '__main__':
         date = vk_client.get_photos()['response']['items'][i]['date']
         dict['size'] = sizes_photo
         response = requests.get(upload_url)
-        if name_photo in dict:
-            with open(f'{name_photo}+{date}.jpg', 'wb') as f:
+
+        if name_photo in photos_name:
+            with open(f'{name_photo}{date}.jpg', 'wb') as f:
                 f.write(response.content)
             dict['file_name'] = name_photo + date
-            result = uploader.upload_file("netology/photo", f"{name_photo}+{date}.jpg")
+            result = uploader.upload_file("", f"{name_photo}+{date}.jpg")
+            photos.append(dict)
+            photos_name.append(name_photo+date)
 
         else:
             with open(f'{name_photo}.jpg', 'wb') as f:
                 f.write(response.content)
             dict['file_name'] = name_photo
-            result = uploader.upload_file("netology/photo", f"{name_photo}.jpg")
+            result = uploader.upload_file('', f"{name_photo}.jpg")
             photos.append(dict)
+            photos_name.append(name_photo)
+
+
 
 
 json = json.dumps(photos)
+print(photos)
 
