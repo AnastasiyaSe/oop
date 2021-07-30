@@ -1,5 +1,5 @@
-token = ''
-Token = ''
+vktoken = ''
+yatoken = ''
 import requests
 import json
 
@@ -7,7 +7,7 @@ class VkUser:
     url = 'http://api.vk.com/method/'
 
     def __init__(self, token, version):
-        self.token = token
+        self.token = vktoken
         self.version = version
         self.params = {
             'access_token': self.token,
@@ -28,12 +28,9 @@ class VkUser:
         res = requests.get(photos_url, params={**self.params, **photos_params})
         return res.json()
 
-
-TOKEN = ''
-
 class YaUploader:
     def __init__(self, token: str):
-        self.token = Token
+        self.token = yatoken
 
     def get_headers(self):
         return {
@@ -61,7 +58,7 @@ class YaUploader:
 
 
 
-vk_client = VkUser(token, '5.126')
+vk_client = VkUser(vktoken, '5.126')
 
 
 
@@ -73,7 +70,7 @@ dict = {}
 photos = []
 photos_name = []
 if __name__ == '__main__':
-    uploader = YaUploader(token=TOKEN)
+    uploader = YaUploader(token=yatoken)
     for i in range(0, 5):
 
         upload_url = vk_client.get_photos()['response']['items'][i]['sizes'][-1]['url']
@@ -86,10 +83,11 @@ if __name__ == '__main__':
         if name_photo in photos_name:
             with open(f'{name_photo}{date}.jpg', 'wb') as f:
                 f.write(response.content)
-            dict['file_name'] = name_photo + date
-            result = uploader.upload_file("", f"{name_photo}+{date}.jpg")
+            original_name = f"{name_photo}{date}"
+            dict['file_name'] = original_name
+            result = uploader.upload_file("", f"{original_name}.jpg")
             photos.append(dict)
-            photos_name.append(name_photo+date)
+            photos_name.append(original_name)
 
         else:
             with open(f'{name_photo}.jpg', 'wb') as f:
